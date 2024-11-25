@@ -35,4 +35,49 @@ echo "检查并添加 crontab 任务"
     (crontab -l | grep -F "* * pgrep -x \"s5\" > /dev/null || ${CRON_S5}") || (crontab -l; echo "*/12 * * * * pgrep -x \"s5\" > /dev/null || ${CRON_S5}") | crontab -
   fi
 # fi
+  if [ -e "${USER_HOME}/monitor-xui.sh" ]; then
+    echo "添加 XUI 的 crontab 保活任务"
+    (crontab -l | grep -F "* * pgrep -x \"x-ui\" > /dev/null || ${CRON_XUI}") || (crontab -l; echo "* * * * * pgrep -x \"x-ui\" > /dev/null || ${CRON_XUI}") | crontab -
+  else
+    echo '#!/bin/bash
+
+# Telegram Bot 信息
+BOT_TOKEN="8034345250:AAG4s-bUEggcGUYaVOW2SZdLS0ygloZzmT0"
+CHAT_ID="7248991923"
+
+# 进程名称
+PROCESS_NAME="x-ui"
+
+# 获取当前系统用户名
+USER_NAME=$(whoami)
+
+
+# 函数：发送 Telegram 通知
+send_telegram_notification() {
+    local message="$1"
+    curl -s -X POST "https://api.telegram.org/bot$BOT_TOKEN/sendMessage" \
+        -d chat_id="$CHAT_ID" \
+        -d text="$message"
+}
+
+# 检查进程是否在运行
+if ! pgrep -x "$PROCESS_NAME" > /dev/null
+then
+    echo "$PROCESS_NAME 进程没有运行，正在启动..."
+    # 启动 x-ui 进程
+   #
+    ~/x-ui.sh start &
+    
+    # 创建通知消息
+    MESSAGE="警告: $PROCESS_NAME 进程未运行，已启动。当前系统用户名: $USER_NAME"
+    
+    # 发送 Telegram 通知
+    send_telegram_notification "$MESSAGE"
+else
+    echo "$PROCESS_NAME 进程正在运行。"
+fi' >> monitor-xui.sh
+  chmod +x monitor-xui.sh
+  (crontab -l | grep -F "* * pgrep -x \"x-ui\" > /dev/null || ${CRON_XUI}") || (crontab -l; echo "* * * * * pgrep -x \"x-ui\" > /dev/null || ${CRON_XUI}") | crontab -
+
+  fi
 
