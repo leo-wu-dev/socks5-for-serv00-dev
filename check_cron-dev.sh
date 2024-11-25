@@ -35,7 +35,4 @@ echo "检查并添加 crontab 任务"
     (crontab -l | grep -F "* * pgrep -x \"s5\" > /dev/null || ${CRON_S5}") || (crontab -l; echo "*/12 * * * * pgrep -x \"s5\" > /dev/null || ${CRON_S5}") | crontab -
   fi
 # fi
-  if [ -e "${USER_HOME}/monitor-xui.sh" ]; then
-    echo "添加 XUI 的 crontab 重启任务"
-    (crontab -l | grep -F "* * pgrep -x \"x-ui\" > /dev/null || ${CRON_XUI}") || (crontab -l; echo "* * * * * pgrep -x \"x-ui\" > /dev/null || ${CRON_XUI}") | crontab -
-  fi
+
