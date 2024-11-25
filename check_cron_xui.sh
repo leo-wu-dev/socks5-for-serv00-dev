@@ -36,9 +36,10 @@ echo "检查并添加 crontab 任务; 用户：${USER}"
   # fi
 # fi
   if [ -e "${USER_HOME}/monitor-xui.sh" ]; then
-    echo "添加 XUI 的 crontab 保活任务"
+    echo "添加 XUI 的 crontab 保活任务; 用户：${USER}"
     (crontab -l | grep -F "* * pgrep -x \"x-ui\" > /dev/null || ${CRON_XUI}") || (crontab -l; echo "* * * * * pgrep -x \"x-ui\" > /dev/null || ${CRON_XUI}") | crontab -
   else
+  echo "添加 XUI 的 crontab 保活任务; 用户：${USER}"
     echo '#!/bin/bash
 
 # Telegram Bot 信息
