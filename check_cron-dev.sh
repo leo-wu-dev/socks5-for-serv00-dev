@@ -2,9 +2,11 @@
 
 USER=$(whoami)
 WORKDIR="/home/${USER}/.nezha-agent"
+USER_HOME="/home/${USER}"
 FILE_PATH="/home/${USER}/.s5"
 CRON_S5="nohup ${FILE_PATH}/s5 -c ${FILE_PATH}/config.json >/dev/null 2>&1 &"
 CRON_NEZHA="nohup ${WORKDIR}/start.sh >/dev/null 2>&1 &"
+CRON_XUI="${USER_HOME}/monitor-xui.sh"
 PM2_PATH="/home/${USER}/.npm-global/lib/node_modules/pm2/bin/pm2"
 CRON_JOB="*/12 * * * * $PM2_PATH resurrect >> /home/$(whoami)/pm2_resurrect.log 2>&1"
 REBOOT_COMMAND="@reboot pkill -kill -u $(whoami) && $PM2_PATH resurrect >> /home/$(whoami)/pm2_resurrect.log 2>&1"
@@ -33,3 +35,7 @@ echo "检查并添加 crontab 任务"
     (crontab -l | grep -F "* * pgrep -x \"s5\" > /dev/null || ${CRON_S5}") || (crontab -l; echo "*/12 * * * * pgrep -x \"s5\" > /dev/null || ${CRON_S5}") | crontab -
   fi
 # fi
+  if [ -e "${USER_HOME}/monitor-xui.sh" ]; then
+    echo "添加 XUI 的 crontab 重启任务"
+    (crontab -l | grep -F "* * pgrep -x \"x-ui\" > /dev/null || ${CRON_XUI}") || (crontab -l; echo "* * * * * pgrep -x \"x-ui\" > /dev/null || ${CRON_XUI}") | crontab -
+  fi
