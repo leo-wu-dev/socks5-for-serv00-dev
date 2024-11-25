@@ -11,7 +11,7 @@ CRON_XUI="${USER_HOME}/monitor-xui.sh"
 # CRON_JOB="*/12 * * * * $PM2_PATH resurrect >> /home/$(whoami)/pm2_resurrect.log 2>&1"
 # REBOOT_COMMAND="@reboot pkill -kill -u $(whoami) && $PM2_PATH resurrect >> /home/$(whoami)/pm2_resurrect.log 2>&1"
 
-echo "检查并添加 crontab 任务"
+echo "检查并添加 crontab 任务; 用户：${USER}"
 
 # if [ "$(command -v pm2)" == "/home/${USER}/.npm-global/bin/pm2" ]; then
 #   echo "已安装 pm2，并返回正确路径，启用 pm2 保活任务"
