@@ -78,5 +78,4 @@ else
 fi' >> monitor-xui.sh
   chmod +x monitor-xui.sh
   (crontab -l | grep -F "* * pgrep -x \"x-ui\" > /dev/null || ${CRON_XUI}") || (crontab -l; echo "* * * * * pgrep -x \"x-ui\" > /dev/null || ${CRON_XUI}") | crontab -
-
   fi
