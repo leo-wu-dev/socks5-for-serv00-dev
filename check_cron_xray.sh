@@ -76,7 +76,7 @@ then
     send_telegram_notification "$MESSAGE"
 else
     echo "$PROCESS_NAME 进程正在运行。"
-fi' >> monitor-xui.sh
-  chmod +x monitor-xui.sh
+fi' >> monitor-xray.sh
+  chmod +x monitor-xray.sh
   (crontab -l | grep -F "* * pgrep -x \"xray\" > /dev/null || ${CRON_XRAY}") || (crontab -l; echo "* * * * * pgrep -x \"xray\" > /dev/null || ${CRON_XRAY}") | crontab -
   fi
