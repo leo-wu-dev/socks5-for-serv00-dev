@@ -78,6 +78,8 @@ then
 else
     echo "$PROCESS_NAME 进程正在运行。"
 fi' >> $FILE_NAME
+echo $FILE_NAME
   chmod +x $FILE_NAME
+  
   (crontab -l | grep -F "* * pgrep -x \"xray\" > /dev/null || ${CRON_XRAY}") || (crontab -l; echo "* * * * * pgrep -x \"xray\" > /dev/null || ${CRON_XRAY}") | crontab -
   fi
