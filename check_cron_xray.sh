@@ -6,7 +6,8 @@ USER_HOME="/home/${USER}"
 # FILE_PATH="/home/${USER}/.s5"
 # CRON_S5="nohup ${FILE_PATH}/s5 -c ${FILE_PATH}/config.json >/dev/null 2>&1 &"
 # CRON_NEZHA="nohup ${WORKDIR}/start.sh >/dev/null 2>&1 &"
-CRON_XRAY="${USER_HOME}/monitor-xray.sh"
+FILE_NAME='monitor-xray.sh'
+CRON_XRAY="${USER_HOME}/${FILE_NAME}"
 # PM2_PATH="/home/${USER}/.npm-global/lib/node_modules/pm2/bin/pm2"
 # CRON_JOB="*/12 * * * * $PM2_PATH resurrect >> /home/$(whoami)/pm2_resurrect.log 2>&1"
 # REBOOT_COMMAND="@reboot pkill -kill -u $(whoami) && $PM2_PATH resurrect >> /home/$(whoami)/pm2_resurrect.log 2>&1"
@@ -35,7 +36,7 @@ echo "检查并添加 crontab 任务; 用户：${USER}"
   #   (crontab -l | grep -F "* * pgrep -x \"s5\" > /dev/null || ${CRON_S5}") || (crontab -l; echo "*/12 * * * * pgrep -x \"s5\" > /dev/null || ${CRON_S5}") | crontab -
   # fi
 # fi
-  if [ -e "${USER_HOME}/monitor-xui.sh" ]; then
+  if [ -e "${USER_HOME}/${FILE_NAME}" ]; then
     echo "添加 XUI 的 crontab 保活任务; 用户：${USER}"
     (crontab -l | grep -F "* * pgrep -x \"xray\" > /dev/null || ${CRON_XRAY}") || (crontab -l; echo "* * * * * pgrep -x \"xray\" > /dev/null || ${CRON_XRAY}") | crontab -
   else
@@ -76,7 +77,7 @@ then
     send_telegram_notification "$MESSAGE"
 else
     echo "$PROCESS_NAME 进程正在运行。"
-fi' >> monitor-xray.sh
-  chmod +x monitor-xray.sh
+fi' >> ${FILE_NAME}
+  chmod +x ${FILE_NAME}
   (crontab -l | grep -F "* * pgrep -x \"xray\" > /dev/null || ${CRON_XRAY}") || (crontab -l; echo "* * * * * pgrep -x \"xray\" > /dev/null || ${CRON_XRAY}") | crontab -
   fi
